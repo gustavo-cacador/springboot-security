@@ -1,6 +1,7 @@
 package br.com.gustavo.springbootexpert_security.api;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,7 @@ public class FooController {
         return ResponseEntity.ok("Private route ok! Usuário conectado: " + authentication.getName());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/admin")
     public ResponseEntity<String> adminRoute() {
         return ResponseEntity.ok("Admin route ok!");

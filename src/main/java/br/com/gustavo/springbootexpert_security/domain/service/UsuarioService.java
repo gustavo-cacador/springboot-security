@@ -7,6 +7,7 @@ import br.com.gustavo.springbootexpert_security.domain.repository.GrupoRepositor
 import br.com.gustavo.springbootexpert_security.domain.repository.UsuarioGrupoRepository;
 import br.com.gustavo.springbootexpert_security.domain.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,9 +25,14 @@ public class UsuarioService {
 
     private final UsuarioGrupoRepository usuarioGrupoRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     // aqui salvamos um novo usuário
     @Transactional
     public Usuario salvar(Usuario usuario, List<String> grupos) {
+        // criptografando senha
+        String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
+        usuario.setSenha(senhaCriptografada);
         usuarioRepository.save(usuario);
 
         // depois associamos esse usuário a grupos existentes, pelo nome do grupo fornecido (findByNome)

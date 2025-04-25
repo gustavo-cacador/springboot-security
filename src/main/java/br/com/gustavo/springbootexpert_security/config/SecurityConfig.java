@@ -26,7 +26,7 @@ public class SecurityConfig {
     // authority -> permissões -> cadastrar usuário, acessar tela de relatório
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, SenhaMasterAuthenticationProvider senhaMasterAuthenticationProvider, CustomFilter customFilter) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, SenhaMasterAuthenticationProvider senhaMasterAuthenticationProvider, CustomAuthenticationProvider customAuthenticationProvider,CustomFilter customFilter) throws Exception{
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(customizer -> {
@@ -36,6 +36,7 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
                 .authenticationProvider(senhaMasterAuthenticationProvider)
+                .authenticationProvider(customAuthenticationProvider)
                 .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

@@ -1,5 +1,7 @@
 package br.com.gustavo.springbootexpert_security.config;
 
+import br.com.gustavo.springbootexpert_security.domain.security.CustomAuthentication;
+import br.com.gustavo.springbootexpert_security.domain.security.IdentificacaoUsuario;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,8 +27,13 @@ public class CustomFilter extends OncePerRequestFilter {
 
         if (secretHeader != null) {
             if (secretHeader.equals("secr3t")) {
-                Authentication authentication = new UsernamePasswordAuthenticationToken(
-                        "Muito secreto", null, List.of(new SimpleGrantedAuthority("USER")));
+                var identificacaoUsuario = new IdentificacaoUsuario(
+                        "id-secret",
+                        "Muito secreto",
+                        "x-secret",
+                        List.of("USER")
+                );
+                Authentication authentication = new CustomAuthentication(identificacaoUsuario);
 
                 SecurityContext securityContext = SecurityContextHolder.getContext();
                 securityContext.setAuthentication(authentication);
